@@ -2744,7 +2744,14 @@ F-statistic: 0.1746 on 1 and 10 DF,  p-value: 0.6849</code></pre>
 </div></aside></section>
 <section id="how-doesbroom-clean-up-model-outputs" class="slide level2">
 <h2>How does<code>broom</code> clean up model outputs</h2>
-<p><img data-src="img/broom_cleanup.png"> :::aside <a href="https://ginolhac.github.io/canbio/case_gapminder.html#20">Source</a> ::: ## Tyding models #### Extract from nested lists</p>
+<p><img data-src="img/broom_cleanup.png"></p>
+
+<aside><div>
+<p><a href="https://ginolhac.github.io/canbio/case_gapminder.html#20">Source</a></p>
+</div></aside></section>
+<section id="tyding-models" class="slide level2">
+<h2>Tyding models</h2>
+<h4 id="extract-from-nested-lists">Extract from nested lists</h4>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-24_0d5c88563bf9ce3284a9694c43551444">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1"></a><span class="fu">library</span>(broom)</span>
 <span id="cb34-2"><a href="#cb34-2"></a>gm_models <span class="ot">&lt;-</span> by_country_lm <span class="sc">%&gt;%</span> </span>
@@ -2836,66 +2843,46 @@ F-statistic: 0.1746 on 1 and 10 DF,  p-value: 0.6849</code></pre>
 <div class="cell-output-display">
 <p><img data-src="index_files/figure-revealjs/unnamed-chunk-27-1.png" width="960"></p>
 </div>
-</div></section><section id="quiz--interpreting-the-linear-model" class="slide level2">
-<h2>Quiz -Interpreting the linear model</h2>
-<ul>
-<li class="fragment">What is the intercept here?</li>
-<li class="fragment">What is the slope?</li>
-<li class="fragment">What would the intercept be with <code>year</code></li>
-</ul>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-28_0a3eb13524cf8cca790bdfb2d85ee0bd">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a><span class="fu">filter</span>(gm_models, country <span class="sc">==</span> <span class="st">"India"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">unnest</span>(tidy) <span class="sc">%&gt;%</span></span>
-<span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">select</span>(rsq<span class="sc">:</span>estimate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-    rsq augment            p.value statistic std.error estimate
-  &lt;dbl&gt; &lt;list&gt;               &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 0.968 &lt;tibble [12 × 8]&gt; 3.09e-12      38.8    0.986    38.3  
-2 0.968 &lt;tibble [12 × 8]&gt; 7.81e- 9      17.5    0.0288    0.505</code></pre>
-</div>
-</div>
-</section>
-<section id="interpreting-the-linear-model" class="slide level2">
+</div></section><section id="interpreting-the-linear-model" class="slide level2">
 <h2>Interpreting the linear model</h2>
 <p>India, <code>lifeExp~year1950</code></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-29_b4f88e2ec0ed29af1476dd51a8729612">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>by_country_lm <span class="sc">%&gt;%</span> </span>
-<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">filter</span>(country<span class="sc">==</span><span class="st">"India"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">unnest</span>(data) <span class="sc">%&gt;%</span> </span>
-<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year1950, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb41-5"><a href="#cb41-5"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-28_0e58e34753412c93c06645cd9c45b4fa">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1"></a>by_country_lm <span class="sc">%&gt;%</span> </span>
+<span id="cb39-2"><a href="#cb39-2"></a>  <span class="fu">filter</span>(country<span class="sc">==</span><span class="st">"India"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-3"><a href="#cb39-3"></a>  <span class="fu">unnest</span>(data) <span class="sc">%&gt;%</span> </span>
+<span id="cb39-4"><a href="#cb39-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year1950, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-28-1.png" width="960" class="r-stretch"></section>
 <section id="interpreting-the-linear-model-1" class="slide level2">
 <h2>Interpreting the linear model</h2>
 <p>India, <code>lifeExp~year</code></p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-30_54c9337edfd189d0dd5702d8c1e9dc06">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1"></a>by_country_lm <span class="sc">%&gt;%</span> </span>
-<span id="cb42-2"><a href="#cb42-2"></a>  <span class="fu">filter</span>(country<span class="sc">==</span><span class="st">"India"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-3"><a href="#cb42-3"></a>  <span class="fu">unnest</span>(data) <span class="sc">%&gt;%</span> </span>
-<span id="cb42-4"><a href="#cb42-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
-<span id="cb42-5"><a href="#cb42-5"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-29_c478f1279e121dd3807e925d7f1ffdf9">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1"></a>by_country_lm <span class="sc">%&gt;%</span> </span>
+<span id="cb40-2"><a href="#cb40-2"></a>  <span class="fu">filter</span>(country<span class="sc">==</span><span class="st">"India"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-3"><a href="#cb40-3"></a>  <span class="fu">unnest</span>(data) <span class="sc">%&gt;%</span> </span>
+<span id="cb40-4"><a href="#cb40-4"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> lifeExp)) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a>  <span class="fu">geom_line</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 
 </div>
-<img data-src="index_files/figure-revealjs/unnamed-chunk-30-1.png" width="960" class="r-stretch"></section>
+<img data-src="index_files/figure-revealjs/unnamed-chunk-29-1.png" width="960" class="r-stretch"></section>
 <section id="visualizing-all-models" class="slide level2">
 <h2>Visualizing all models</h2>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-31_90b6240b5c4a7435a096ecf77cf06e4c">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1"></a>gm_models <span class="sc">%&gt;%</span></span>
-<span id="cb43-2"><a href="#cb43-2"></a>  <span class="fu">unnest</span>(tidy) <span class="sc">%&gt;%</span></span>
-<span id="cb43-3"><a href="#cb43-3"></a>  <span class="fu">select</span>(continent, country, rsq, term, estimate) <span class="sc">%&gt;%</span></span>
-<span id="cb43-4"><a href="#cb43-4"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> estimate) <span class="sc">%&gt;%</span></span>
-<span id="cb43-5"><a href="#cb43-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">(Intercept)</span><span class="st">`</span>, <span class="at">y =</span> year1950)) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="#cb43-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> continent, <span class="at">size =</span> rsq)) <span class="sc">+</span></span>
-<span id="cb43-7"><a href="#cb43-7"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
-<span id="cb43-8"><a href="#cb43-8"></a>  <span class="fu">scale_size_area</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Life expectancy (1950)"</span>, <span class="at">y =</span> <span class="st">"Yearly improvement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-30_3324e530d8fdff3f874251d53b9b2dbd">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1"></a>gm_models <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a>  <span class="fu">unnest</span>(tidy) <span class="sc">%&gt;%</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a>  <span class="fu">select</span>(continent, country, rsq, term, estimate) <span class="sc">%&gt;%</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> term, <span class="at">values_from =</span> estimate) <span class="sc">%&gt;%</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">(Intercept)</span><span class="st">`</span>, <span class="at">y =</span> year1950)) <span class="sc">+</span></span>
+<span id="cb41-6"><a href="#cb41-6"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">colour =</span> continent, <span class="at">size =</span> rsq)) <span class="sc">+</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a>  <span class="fu">geom_smooth</span>(<span class="at">se =</span> <span class="cn">FALSE</span>, <span class="at">method =</span> <span class="st">"loess"</span>) <span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a>  <span class="fu">scale_size_area</span>() <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Life expectancy (1950)"</span>, <span class="at">y =</span> <span class="st">"Yearly improvement"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
-</section><section id="visualizing-all-models-output" class="slide level2 output-location-slide"><h2>Visualizing all models</h2><div class="cell output-location-slide" data-hash="index_cache/revealjs/unnamed-chunk-31_90b6240b5c4a7435a096ecf77cf06e4c">
+</section><section id="visualizing-all-models-output" class="slide level2 output-location-slide"><h2>Visualizing all models</h2><div class="cell output-location-slide" data-hash="index_cache/revealjs/unnamed-chunk-30_3324e530d8fdff3f874251d53b9b2dbd">
 <div class="cell-output-display">
-<p><img data-src="index_files/figure-revealjs/unnamed-chunk-31-1.png" width="960"></p>
+<p><img data-src="index_files/figure-revealjs/unnamed-chunk-30-1.png" width="960"></p>
 </div>
 </div></section></section>
 <section>

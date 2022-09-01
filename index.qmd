@@ -361,9 +361,11 @@ Lear more [here](https://broom.tidymodels.org/)
 ## How does`broom` clean up model outputs
 
 ![](img/broom_cleanup.png)
-:::aside
+
+::: aside
 [Source](https://ginolhac.github.io/canbio/case_gapminder.html#20)
 :::
+
 ## Tyding models
 #### Extract from nested lists
 
@@ -427,17 +429,6 @@ gm_models %>%
   theme(axis.text.x = element_text(angle = 45,
                                    hjust = 1),
         legend.position = "bottom")
-```
-
-## Quiz -Interpreting the linear model
-- What is the intercept here?
-- What is the slope?
-- What would the intercept be with `year`
-
-```{r}
-filter(gm_models, country == "India") %>%
-  unnest(tidy) %>%
-  select(rsq:estimate)
 ```
 
 ## Interpreting the linear model 
