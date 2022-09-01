@@ -2449,11 +2449,18 @@ F-statistic: 398.6 on 1 and 1702 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="plot-diagnostics---normal-q-q" class="slide level2">
 <h2>Plot diagnostics - Normal Q-Q</h2>
 <p>Residuals are normally distributed if dots fall on the straight line</p>
-<p><img data-src="img/dia2.jpeg"> ## Plot diagnostics - Scale-location</p>
-<p>This plot shows if residuals are spread equally along the range of predictors <img data-src="img/dia3.jpeg"> ## Plot diagnostics - Residuals vs Leverage</p>
+
+<img data-src="img/dia2.jpeg" class="r-stretch"></section>
+<section id="plot-diagnostics---scale-location" class="slide level2">
+<h2>Plot diagnostics - Scale-location</h2>
+<p>This plot shows if residuals are spread equally along the range of predictors</p>
+
+<img data-src="img/dia3.jpeg" class="r-stretch"></section>
+<section id="plot-diagnostics---residuals-vs-leverage" class="slide level2">
+<h2>Plot diagnostics - Residuals vs Leverage</h2>
 <p>Are there influential points in the data</p>
-<p><img data-src="img/dia4.jpeg"></p>
-</section></section>
+
+<img data-src="img/dia4.jpeg" class="r-stretch"></section></section>
 <section id="demo-1" class="title-slide slide level1 center">
 <h1>Demo</h1>
 
@@ -2476,23 +2483,21 @@ F-statistic: 398.6 on 1 and 1702 DF,  p-value: &lt; 2.2e-16</code></pre>
 <section id="keep-related-things-together-group_nest" class="slide level2">
 <h2>Keep related things together <code>group_nest()</code></h2>
 <p>Nest by country</p>
-<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-14_8c496c101c17f4558fe2b8176c382345">
+<div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-14_b33758a7c54c8d6f623f690d34f32e49">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>by_country <span class="ot">&lt;-</span> gapminder <span class="sc">%&gt;%</span> </span>
 <span id="cb16-2"><a href="#cb16-2"></a>  <span class="fu">mutate</span>(<span class="at">year1950 =</span> year <span class="sc">-</span> <span class="dv">1950</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb16-3"><a href="#cb16-3"></a>  <span class="fu">group_nest</span>(continent, country)</span>
-<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">head</span>(by_country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="fu">head</span>(by_country, <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell fragment" data-hash="index_cache/revealjs/unnamed-chunk-14_8c496c101c17f4558fe2b8176c382345">
+<div class="cell fragment" data-hash="index_cache/revealjs/unnamed-chunk-14_b33758a7c54c8d6f623f690d34f32e49">
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  continent country                    data
-  &lt;fct&gt;     &lt;fct&gt;        &lt;list&lt;tibble[,5]&gt;&gt;
-1 Africa    Algeria                [12 × 5]
-2 Africa    Angola                 [12 × 5]
-3 Africa    Benin                  [12 × 5]
-4 Africa    Botswana               [12 × 5]
-5 Africa    Burkina Faso           [12 × 5]
-6 Africa    Burundi                [12 × 5]</code></pre>
+<pre><code># A tibble: 4 × 3
+  continent country                data
+  &lt;fct&gt;     &lt;fct&gt;    &lt;list&lt;tibble[,5]&gt;&gt;
+1 Africa    Algeria            [12 × 5]
+2 Africa    Angola             [12 × 5]
+3 Africa    Benin              [12 × 5]
+4 Africa    Botswana           [12 × 5]</code></pre>
 </div>
 </div>
 <div class="smaller">
@@ -2593,7 +2598,7 @@ F-statistic: 398.6 on 1 and 1702 DF,  p-value: &lt; 2.2e-16</code></pre>
 <li class="fragment">Plot Life expectancy <code>LifeExp</code> VS <code>Year</code> for India</li>
 </ol>
 </section>
-<section id="map-practice" class="slide level2">
+<section id="map-practice" class="slide level2 smaller">
 <h2><code>map</code> practice</h2>
 <p>How many rows per country?</p>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-18_2112e9ba152dce064097387bb47e657a">
@@ -2630,9 +2635,8 @@ F-statistic: 398.6 on 1 and 1702 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 </section>
-<section id="plotting-for-one-country" class="slide level2">
+<section id="plotting-for-one-country" class="slide level2 smaller">
 <h2>Plotting for one country</h2>
-<p>India</p>
 <div class="cell" data-hash="index_cache/revealjs/unnamed-chunk-20_e1318d89597700bf3b75aa2d88272430">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1"></a>by_country_lm <span class="sc">%&gt;%</span> </span>
 <span id="cb28-2"><a href="#cb28-2"></a>  <span class="fu">filter</span>(country<span class="sc">==</span><span class="st">"India"</span>) <span class="sc">%&gt;%</span> </span>

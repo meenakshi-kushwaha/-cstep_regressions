@@ -200,10 +200,13 @@ Residuals should be equally spread around the horizontal line
 Residuals are normally distributed if dots fall on the straight line
 
 ![](img/dia2.jpeg)
+
 ## Plot diagnostics - Scale-location
 
 This plot shows if residuals are spread equally along the range of predictors
+
 ![](img/dia3.jpeg)
+
 ## Plot diagnostics - Residuals vs Leverage
 
 Are there influential points in the data
@@ -230,7 +233,7 @@ Nest by country
 by_country <- gapminder %>% 
   mutate(year1950 = year - 1950) %>% 
   group_nest(continent, country)
-head(by_country)
+head(by_country, 4)
 ```
 
 :::{.smaller}
@@ -274,7 +277,7 @@ by_country_lm
 1. How would you count how many rows are there per country?
 2. Plot Life expectancy `LifeExp` VS `Year` for India
 
-## `map` practice
+## `map` practice {.smaller}
 How many rows per country?
 ```{r}
 #| output-location: fragment
@@ -296,8 +299,8 @@ by_country_lm %>%
   distinct(n)
 ```
 
-## Plotting for one country
-India
+## Plotting for one country {.smaller}
+
 ```{r}
 #| output-location: fragment
 by_country_lm %>% 
