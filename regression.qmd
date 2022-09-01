@@ -1,0 +1,486 @@
+---
+title: "Statistics and Modelling"
+author: "Meenakshi Kushwaha"
+date: "1st September, 2022"
+format: 
+  revealjs:
+    theme: [my_theme.scss]
+    incremental: true
+    slide-number: true
+
+execute:
+  echo: true
+  cache: true
+---
+
+## Packages for today
+
+```{r}
+#| message: false
+#| warning: false
+library(gapminder) # dataset
+library(tidyverse) # data wrangling
+library(here) # file path
+library(gtsummary) # summary statistics tables
+library(flextable) # saving tables as word file
+```
+
+## Today we will cover (a lot)
+- Summary statistics
+- Linear Regression models
+- Handling multiple models
+- Machine Learning terminology (very briefly)
+
+# Presenting Summary Statistics
+## Simple table in R
+
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|4"
+
+gapminder %>% 
+  filter(country == "India",
+         year > 1980) %>% 
+  select(year, pop, lifeExp ) %>% 
+  knitr::kable() # print in table format
+
+```
+
+## Summary Statistics
+
+Generate summary statistics by continent for `gapminder` dataset
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|3"
+gapminder %>% 
+  select(-country) %>% # drop country and year variable
+  tbl_summary()
+```
+
+## Customizing your table
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|3"
+
+gapminder %>% 
+  select(-country) %>% # drop country variable
+  tbl_summary(include = -year)
+```
+
+## Customizing your table
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|3"
+
+gapminder %>% 
+  select(-country) %>% # drop country variable
+  tbl_summary(include = c(continent, lifeExp, gdpPercap))
+```
+
+## Customizing your table
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|4"
+
+gapminder %>% 
+  select(-country, - year) %>% # drop country and year variable
+  tbl_summary() %>% 
+  bold_labels()
+```
+
+::: aside
+See [tutorial](https://www.danieldsjoberg.com/gtsummary/index.html#gtsummary--r-markdown) for more options
+:::
+
+## Saving your summary table
+- Save as image, RTF, LaTeX, and Word file
+- Embed in Rmarkdown output
+. . .
+
+Save your table as .docx file
+```{r}
+#| output-location: fragment
+#| code-line-numbers: "|4,5"
+
+gapminder %>% 
+  select(-country, - year) %>% # drop country and year variable
+  tbl_summary() %>% 
+  as_flex_table() %>% # save table as Word file 
+  save_as_docx(path = here("myfile.docx")) 
+```
+::: aside
+Syntax for other [formats](https://www.danieldsjoberg.com/gtsummary/index.html#gtsummary--r-markdown) 
+:::
+
+# Demo
+
+
+
+# Modelling
+
+
+## A simple linear model in R
+What is the relationship between Life Expectancy and Population 
+```{r}
+#| eval: false
+
+lm(lifeExp ~ pop, data = gapminder)
+```
+
+is the same as 
+
+```{r}
+#| eval: false
+gapminder %>% 
+  lm(lifeExp ~ pop, data = .)
+```
+
+
+## Linear regression in R
+
+`lm (outcome ~ exp var 1 + exp var 2 +...., data = <your_df>)`
+
+. . .
+
+is the same as
+
+`your_df %>% `
+  `lm(outcome ~ exp var 1 + exp var 2 +....,)`
+  
+The `+` here means `include` and not addtion  
+
+## Your first linear model
+```{r}
+#| output-location: fragment
+
+gapminder %>% 
+  lm(lifeExp ~ year, data = .) 
+
+```
+ 
+
+## Your first linear model
+
+Now, we will assign the model to an object to extract more information
+
+```{r}
+#| code-line-numbers: "|2"
+
+my_model <- gapminder %>% 
+  lm(lifeExp ~ year, data = .) 
+
+summary(my_model)
+```
+
+Notice that this is the same summary function that you use with df. But depending on the input, it will give diff output.
+
+## Testing model assumptions
+
+```{r}
+arg_model <- gapminder %>% 
+  filter(country == "Argentina") %>% 
+  lm(lifeExp ~ year, data = .)
+plot(arg_model) # generates four diagnostic plots
+```
+
+
+## Plot diagnostics - residual vs fitted
+
+Residuals should be equally spread around the horizontal line
+- any patterns indicate non-linear relationsihp
+
+![](img/dia1.jpeg)
+
+::: aside
+[Source](https://data.library.virginia.edu/diagnostic-plots/)
+:::
+
+## Plot diagnostics - Normal Q-Q
+
+Residuals are normally distributed if dots fall on the straight line
+
+![](img/dia2.jpeg)
+## Plot diagnostics - Scale-location
+
+This plot shows if residuals are spread equally along the range of predictors
+![](img/dia3.jpeg)
+## Plot diagnostics - Residuals vs Leverage
+
+Are there influential points in the data
+
+![](img/dia4.jpeg)
+
+# Demo
+
+# Multiple models
+How does life expectancy change with time in each country
+
+## Global vs local trend
+```{r}
+gapminder %>%
+  ggplot(aes(x = year, y = lifeExp, group = country)) +
+  geom_line(alpha = 1/3)
+```
+
+## Keep related things together `group_nest()`
+
+Nest by country
+```{r}
+#| output-location: fragment
+by_country <- gapminder %>% 
+  mutate(year1950 = year - 1950) %>% 
+  group_nest(continent, country)
+head(by_country)
+```
+
+:::{.smaller}
+- by default list column is named `data`
+- `year1950` for meaningful intercepts
+- add `continent` to keep it along with `country`
+:::
+
+# One country example
+
+::: {.panel-tabset}
+
+### From original tibble
+```{r}
+#| output-location: fragment
+gapminder %>% 
+  filter(country == "India") %>% 
+  select(-country, -continent)
+```
+
+### From nested tibble
+
+```{r}
+#| output-location: fragment
+by_country %>% 
+  filter(country == "India") %>% 
+  unnest(data)
+```
+
+:::
+
+## Linear model per country
+```{r}
+#| output-location: fragment
+by_country_lm <- by_country %>% 
+  mutate(model = map(data, ~lm(lifeExp ~ year1950, data = .)))# to each element of data column apply lm() function
+by_country_lm
+```
+
+## Quiz
+1. How would you count how many rows are there per country?
+2. Plot Life expectancy `LifeExp` VS `Year` for India
+
+## `map` practice
+How many rows per country?
+```{r}
+#| output-location: fragment
+by_country_lm %>% 
+  mutate(n = map_int(data, nrow)) %>% 
+  select(country, n) %>% 
+  head(4)
+```
+
+. . .
+
+Do all countries have the same amount of data?
+Check if all have same # of rows?
+
+```{r}
+#| output-location: fragment
+by_country_lm %>% 
+ mutate(n = map_int(data, nrow)) %>% 
+  distinct(n)
+```
+
+## Plotting for one country
+India
+```{r}
+#| output-location: fragment
+by_country_lm %>% 
+  filter(country=="India") %>% 
+  unnest(data) %>% 
+  ggplot(aes(x = year1950, y = lifeExp)) +
+  geom_line()
+```
+
+
+## Linear model for India
+```{r}
+#| output-location: fragment
+by_country_lm%>% 
+  filter(country == "India") %>% 
+  pluck("model", 1) %>% 
+  summary()
+```
+
+## Linear model for Rwanda
+```{r}
+by_country_lm%>% 
+  filter(country == "Rwanda") %>% 
+  pluck("model", 1) %>% 
+  summary()
+```
+
+## Verify by plotting for Rwanda
+```{r}
+#| output-location: fragment
+by_country_lm %>% 
+  filter(country=="Rwanda") %>% 
+  unnest(data) %>% 
+  ggplot(aes(x = year1950, y = lifeExp)) +
+  geom_line()
+```
+
+## Cleaning model outputs using `broom` package
+
+:::: {.columns}
+
+::: {.column width="40%"}
+![](img/broom.jpeg)
+:::
+
+::: {.column width="60%"}
+- `tidy()` summarizes information about model components
+- `glance()` reports information about the entire model
+- `augment()` adds informations about observations to a dataset
+:::
+
+::::
+
+:::aside
+Lear more [here](https://broom.tidymodels.org/)
+:::
+
+## How does`broom` clean up model outputs
+
+![](img/broom_cleanup.png)
+:::aside
+[Source](https://ginolhac.github.io/canbio/case_gapminder.html#20)
+:::
+## Tyding models
+#### Extract from nested lists
+
+```{r}
+#| output-location: fragment
+library(broom)
+gm_models <- by_country_lm %>% 
+  mutate(glance= map(model, glance),
+         tidy = map(model, tidy),
+         augment = map(model, augment),
+         rsq = map_dbl(glance, "r.squared"))
+
+gm_models
+  
+```
+
+## Do linear models fit all countries?
+```{r}
+#| output-location: slide
+library(forcats) # working with factors
+gm_models %>%
+  ggplot(aes(x = rsq, 
+             y = fct_reorder(country,
+                             rsq))) +
+  geom_point(aes(colour = continent), 
+             alpha = 0.5) +
+  theme_classic() +
+  theme(axis.text.y = element_blank(), 
+        axis.ticks.y = element_blank())+
+  labs(x = "r square",
+       y = "Country") 
+```
+
+## Countries with non-linear trends
+### Focus on countries with low `rsq`
+
+```{r}
+#| output-location: slide
+gm_models %>% 
+  top_n(20, desc(rsq)) %>% # select rows by value
+  unnest(data) %>%
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line(aes(colour = continent)) +
+  facet_wrap(~ country) +
+  theme(axis.text.x = element_text(angle = 45,
+                                   hjust = 1),
+        legend.position = "bottom")
+```
+
+## Countries with strong linear trends
+### Focus on countries with high `rsq`
+
+```{r}
+#| output-location: slide
+gm_models %>% 
+  top_n(20, rsq) %>%
+  unnest(data) %>%
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line(aes(colour = continent)) +
+  facet_wrap(~ country) +
+  theme(axis.text.x = element_text(angle = 45,
+                                   hjust = 1),
+        legend.position = "bottom")
+```
+
+## Quiz -Interpreting the linear model
+- What is the intercept here?
+- What is the slope?
+- What would the intercept be with `year`
+
+```{r}
+filter(gm_models, country == "India") %>%
+  unnest(tidy) %>%
+  select(rsq:estimate)
+```
+
+## Interpreting the linear model 
+India, `lifeExp~year1950`
+```{r}
+by_country_lm %>% 
+  filter(country=="India") %>% 
+  unnest(data) %>% 
+  ggplot(aes(x = year1950, y = lifeExp)) +
+  geom_line()
+```
+
+## Interpreting the linear model 
+India, `lifeExp~year`
+```{r}
+by_country_lm %>% 
+  filter(country=="India") %>% 
+  unnest(data) %>% 
+  ggplot(aes(x = year, y = lifeExp)) +
+  geom_line()
+```
+
+
+## Visualizing all models
+```{r}
+#| output-location: slide
+gm_models %>%
+  unnest(tidy) %>%
+  select(continent, country, rsq, term, estimate) %>%
+  pivot_wider(names_from = term, values_from = estimate) %>%
+  ggplot(aes(x = `(Intercept)`, y = year1950)) +
+  geom_point(aes(colour = continent, size = rsq)) +
+  geom_smooth(se = FALSE, method = "loess") +
+  scale_size_area() + labs(x = "Life expectancy (1950)", y = "Yearly improvement")
+```
+
+
+# Where does Linear regression fit in Machine Learning?
+ML [Cheatsheet](https://i2.wp.com/www.thertrader.com/wp-content/uploads/2018/03/Picture3.jpg)
+
+
+## Resources
+
+:::{.non-incremental}
+
+-Tutorial by [A. Ginolhac](https://ginolhac.github.io/canbio/case_gapminder.html#1)
+
+-R for Data Science Book - [Modelling](https://r4ds.had.co.nz/model-basics.html) chapters
+:::
